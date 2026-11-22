@@ -14,10 +14,29 @@ const TaskSchema = new mongoose.Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
+TaskSchema.virtual('dueDate')
+  .get(function() {
+    return this.due_date;
+  })
+  .set(function(val) {
+    this.due_date = val;
+  });
+
 TaskSchema.set('toJSON', {
   virtuals: true,
   transform: (doc, ret) => {
     ret.id = ret._id;
+    ret.dueDate = ret.due_date;
+    delete ret.__v;
+    return ret;
+  }
+});
+
+TaskSchema.set('toObject', {
+  virtuals: true,
+  transform: (doc, ret) => {
+    ret.id = ret._id;
+    ret.dueDate = ret.due_date;
     delete ret.__v;
     return ret;
   }

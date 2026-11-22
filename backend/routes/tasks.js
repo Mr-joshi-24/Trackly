@@ -58,16 +58,19 @@ router.get('/:id', async (req, res, next) => {
 // POST /api/tasks - Create task
 router.post('/', async (req, res, next) => {
   try {
-    const { title, description = '', due_date = '', priority = 'Medium', status = 'Pending', category = 'General' } = req.body;
+    const { title, description = '', due_date, dueDate, priority = 'Medium', status = 'Pending', category = 'General' } = req.body;
 
     if (!title || !title.trim()) {
       return res.status(400).json({ success: false, error: 'Task title is required' });
     }
 
+    const rawDueDate = dueDate !== undefined ? dueDate : due_date;
+    const resolvedDueDate = rawDueDate ? String(rawDueDate).trim() : '';
+
     const newTask = await Task.create({
       title: title.trim(),
       description: description.trim(),
-      due_date: due_date.trim(),
+      due_date: resolvedDueDate,
       priority,
       status,
       category: category.trim()
@@ -82,7 +85,7 @@ router.post('/', async (req, res, next) => {
 // PUT /api/tasks/:id - Edit task
 router.put('/:id', async (req, res, next) => {
   try {
-    const { title, description = '', due_date = '', priority = 'Medium', status = 'Pending', category = 'General' } = req.body;
+    const { title, description = '', due_date, dueDate, priority = 'Medium', status = 'Pending', category = 'General' } = req.body;
 
     if (!title || !title.trim()) {
       return res.status(400).json({ success: false, error: 'Task title is required' });
@@ -93,9 +96,12 @@ router.put('/:id', async (req, res, next) => {
       return res.status(404).json({ success: false, error: 'Task not found' });
     }
 
+    const rawDueDate = dueDate !== undefined ? dueDate : due_date;
+    const resolvedDueDate = rawDueDate !== undefined ? String(rawDueDate).trim() : task.due_date;
+
     task.title = title.trim();
     task.description = description.trim();
-    task.due_date = due_date.trim();
+    task.due_date = resolvedDueDate;
     task.priority = priority;
     task.status = status;
     task.category = category.trim();

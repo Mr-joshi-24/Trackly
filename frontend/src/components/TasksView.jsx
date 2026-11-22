@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, CheckSquare, Square, Calendar, Filter, ArrowUpDown } from 'lucide-react';
 import Modal from './Modal';
+import { formatDueDate } from '../utils/dateUtils';
 
 export default function TasksView({ tasks, loading, onCreateTask, onUpdateTask, onToggleTask, onDeleteTask }) {
   const [statusFilter, setStatusFilter] = useState('All');
@@ -208,14 +209,12 @@ export default function TasksView({ tasks, loading, onCreateTask, onUpdateTask, 
                       </span>
                     </td>
                     <td>
-                      {task.due_date ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.88rem' }}>
+                      {formatDueDate(task.due_date || task.dueDate) ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.88rem', whiteSpace: 'nowrap' }}>
                           <Calendar size={14} color="var(--text-dim)" />
-                          {task.due_date}
+                          <span>{formatDueDate(task.due_date || task.dueDate)}</span>
                         </div>
-                      ) : (
-                        <span style={{ color: 'var(--text-dim)', fontSize: '0.85rem' }}>-</span>
-                      )}
+                      ) : null}
                     </td>
                     <td>
                       <span className={`badge badge-${task.status.toLowerCase()}`}>

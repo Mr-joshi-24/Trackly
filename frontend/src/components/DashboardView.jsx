@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Activity
 } from 'lucide-react';
+import TaskCard from './TaskCard';
 
 export default function DashboardView({ stats, loading, setActiveTab }) {
   if (loading || !stats) {
@@ -179,13 +180,7 @@ export default function DashboardView({ stats, loading, setActiveTab }) {
           {tasks.recent && tasks.recent.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {tasks.recent.map((task) => (
-                <div key={task.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0.75rem', backgroundColor: 'var(--bg-primary)', borderRadius: 'var(--radius-md)' }}>
-                  <div>
-                    <div style={{ fontWeight: 500, fontSize: '0.9rem' }}>{task.title}</div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Due: {task.due_date || 'No due date'}</div>
-                  </div>
-                  <span className={`badge badge-${task.priority.toLowerCase()}`}>{task.priority}</span>
-                </div>
+                <TaskCard key={task.id} task={task} />
               ))}
             </div>
           ) : (
